@@ -61,5 +61,26 @@ def upload():
                 }), 500
 
 
+@app.route("/translate", methods=["POST"])
+def translate():
+    if request.method == "POST":
+        input_data = request.get_json()
+        text = input_data["text"]
+        source = input_data["source"]
+        target = input_data["target"]
+
+        translation_result = translate(text, source, target)
+
+        return jsonify({
+            "status": {
+                "code": 200,
+                "message": "Success translating text"
+            },
+            "data": {
+                "translation_text": translation_result
+            }
+        }), 200
+
+
 if __name__ == "__main__":
     app.run()
