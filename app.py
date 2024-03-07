@@ -61,13 +61,5 @@ def upload():
                 }), 500
 
 
-@app.route("/translate", methods=["POST"])
-def translate_route():
-    if request.method == "POST":
-        input_data = request.get_json()
-    else:
-        return
-
-
 if __name__ == "__main__":
     app.run()

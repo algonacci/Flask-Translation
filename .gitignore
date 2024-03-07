@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+voice_note.wav
 
 # C extensions
 *.so
