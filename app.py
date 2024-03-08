@@ -105,13 +105,16 @@ def upload_image():
 
         recognized_text = ' '.join([x[1] for x in result])
 
+        translated_text = translate(recognized_text, "ar", "id")
+
         return jsonify({
             "status": {
                 "code": 200,
                 "message": "Success recognizing text from the image"
             },
             "data": {
-                "recognized_text": recognized_text
+                "recognized_text": recognized_text,
+                "translated_text": translated_text
             }
         }), 200
 
