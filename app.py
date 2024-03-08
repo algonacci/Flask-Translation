@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 import speech_recognition as sr
 from helpers import translate
 import easyocr
+import os
 
 
 app = Flask(__name__)
@@ -98,6 +99,9 @@ def upload_image():
         image = request.files["image"]
         image_path = "static/uploads/image.jpg"
         image.save(image_path)
+
+        image_size = os.path.getsize(image_path)
+        print(image_size)
 
         # Perform OCR on the image
         reader = easyocr.Reader(['ar'])  # You can specify languages here
