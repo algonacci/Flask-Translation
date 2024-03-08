@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 import speech_recognition as sr
 from helpers import translate
+import easyocr
 
 
 app = Flask(__name__)
@@ -62,7 +63,7 @@ def upload():
 
 
 @app.route("/translate", methods=["POST"])
-def translate():
+def translate_endpoint():
     if request.method == "POST":
         input_data = request.get_json()
         text = input_data["text"]
@@ -78,6 +79,39 @@ def translate():
             },
             "data": {
                 "translation_text": translation_result
+            }
+        }), 200
+
+
+@app.route("/upload_image", methods=["POST"])
+def upload_image():
+    if request.method == "POST":
+        if "image" not in request.files:
+            return jsonify({
+                "status": {
+                    "code": 400,
+                    "message": "No image file provided"
+                },
+                "data": None
+            }), 400
+
+        image = request.files["image"]
+        image_path = "static/uploads/image.jpg"
+        image.save(image_path)
+
+        # Perform OCR on the image
+        reader = easyocr.Reader(['ar'])  # You can specify languages here
+        result = reader.readtext(image_path)
+
+        recognized_text = ' '.join([x[1] for x in result])
+
+        return jsonify({
+            "status": {
+                "code": 200,
+                "message": "Success recognizing text from the image"
+            },
+            "data": {
+                "recognized_text": recognized_text
             }
         }), 200
 
